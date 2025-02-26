@@ -3,6 +3,7 @@ import random
 import heapq
 from statistics import mean
 from cl_args import parse_arguments
+from simulation_config import load_simulation_parameters
 
 class Player:
     def __init__(self, pid, elo):
@@ -93,24 +94,10 @@ def process_game_finish(event_data, current_time, players, event_queue, sim_para
             "queue_type": random.choice(["1v1", "group"])
         })
 
-def run_simulation(sim_time, num_players, elo_strategy, mm_strategy, log_file, seed):
+def run_simulation(sim_time, num_players, elo_strategy, mm_strategy, log_file, seed, sim_params):
     # Set random seed if provided.
     if seed is not None:
         random.seed(seed)
-
-    # Simulation parameters (can be adjusted or extended for other strategies).
-    sim_params = {
-        "game_min_duration": 30,        # Minimum game duration (seconds)
-        "game_max_duration": 90,        # Maximum game duration (seconds)
-        "min_wait_before_requeue": 5,   # Minimum wait after finishing a game
-        "max_wait_before_requeue": 30,  # Maximum wait after finishing a game
-        "duel_win_bonus": 20,           # Elo bonus for winning a duel
-        "duel_loss_penalty": 20,        # Elo penalty for losing a duel
-        "group_min": 6,                 # Minimum players needed for a group match
-        "group_max": 10,                # Maximum players in a group match
-        "group_win_bonus": 10,          # Elo bonus for winning a group game
-        "group_loss_penalty": 5         # Elo penalty for losing a group game
-    }
 
     # Initialize players with Elo values drawn from a normal distribution.
     players = [Player(pid, random.gauss(1500, 100)) for pid in range(num_players)]
@@ -199,13 +186,16 @@ def run_simulation(sim_time, num_players, elo_strategy, mm_strategy, log_file, s
 def main():
     args = parse_arguments()
 
+    sim_params = load_simulation_parameters(args.sim_config)
+
     run_simulation(
         args.sim_time,
         args.num_players,
         args.elo_strategy,
         args.mm_strategy,
         args.log_file,
-        args.seed
+        args.seed,
+        sim_params
     )
 
 if __name__ == "__main__":

@@ -1,0 +1,12 @@
+{
+  "game_min_duration": 30,
+  "game_max_duration": 90,
+  "min_wait_before_requeue": 5,
+  "max_wait_before_requeue": 30,
+  "duel_win_bonus": 20,
+  "duel_loss_penalty": 20,
+  "group_min": 6,
+  "group_max": 10,
+  "group_win_bonus": 10,
+  "group_loss_penalty": 5
+}

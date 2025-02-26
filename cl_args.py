@@ -1,7 +1,7 @@
 import argparse
 
 
-def parse_arguments(args):
+def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Matchmaking Simulation CLI Tool"
     )
@@ -54,6 +54,14 @@ def parse_arguments(args):
         type=int,
         default=None,
         help="Random seed for reproducibility"
+    )
+
+
+    parser.add_argument(
+        "--sim-config",
+        type=str,
+        default="simulation_config.json",
+        help="Simulation configuration file (default: simulation_config.json)"
     )
 
     return parser.parse_args()
