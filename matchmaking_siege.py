@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import argparse
 import random
 import heapq
 from statistics import mean
+from cl_args import parse_arguments
 
 class Player:
     def __init__(self, pid, elo):
@@ -100,16 +100,16 @@ def run_simulation(sim_time, num_players, elo_strategy, mm_strategy, log_file, s
 
     # Simulation parameters (can be adjusted or extended for other strategies).
     sim_params = {
-        "game_min_duration": 30,      # Minimum game duration (seconds)
-        "game_max_duration": 90,      # Maximum game duration (seconds)
-        "min_wait_before_requeue": 5, # Minimum wait after finishing a game
-        "max_wait_before_requeue": 30,# Maximum wait after finishing a game
-        "duel_win_bonus": 20,         # Elo bonus for winning a duel
-        "duel_loss_penalty": 20,      # Elo penalty for losing a duel
-        "group_min": 6,               # Minimum players needed for a group match
-        "group_max": 10,              # Maximum players in a group match
-        "group_win_bonus": 10,        # Elo bonus for winning a group game
-        "group_loss_penalty": 5       # Elo penalty for losing a group game
+        "game_min_duration": 30,        # Minimum game duration (seconds)
+        "game_max_duration": 90,        # Maximum game duration (seconds)
+        "min_wait_before_requeue": 5,   # Minimum wait after finishing a game
+        "max_wait_before_requeue": 30,  # Maximum wait after finishing a game
+        "duel_win_bonus": 20,           # Elo bonus for winning a duel
+        "duel_loss_penalty": 20,        # Elo penalty for losing a duel
+        "group_min": 6,                 # Minimum players needed for a group match
+        "group_max": 10,                # Maximum players in a group match
+        "group_win_bonus": 10,          # Elo bonus for winning a group game
+        "group_loss_penalty": 5         # Elo penalty for losing a group game
     }
 
     # Initialize players with Elo values drawn from a normal distribution.
@@ -197,22 +197,16 @@ def run_simulation(sim_time, num_players, elo_strategy, mm_strategy, log_file, s
     return results
 
 def main():
-    parser = argparse.ArgumentParser(description="Matchmaking Simulation CLI Tool")
-    parser.add_argument("--sim-time", type=float, default=3600,
-                        help="Total simulation time in seconds (default: 3600)")
-    parser.add_argument("--num-players", type=int, default=5000,
-                        help="Number of players in the simulation (default: 5000)")
-    parser.add_argument("--elo-strategy", type=str, default="naive", choices=["naive"],
-                        help="ELO strategy to use (default: naive)")
-    parser.add_argument("--mm-strategy", type=str, default="naive", choices=["naive"],
-                        help="Matchmaking strategy to use (default: naive)")
-    parser.add_argument("--log-file", type=str, default="matchmaking_stats.log",
-                        help="File to which stats are logged (default: matchmaking_stats.log)")
-    parser.add_argument("--seed", type=int, default=None,
-                        help="Random seed for reproducibility")
-    args = parser.parse_args()
+    args = parse_arguments()
 
-    run_simulation(args.sim_time, args.num_players, args.elo_strategy, args.mm_strategy, args.log_file, args.seed)
+    run_simulation(
+        args.sim_time,
+        args.num_players,
+        args.elo_strategy,
+        args.mm_strategy,
+        args.log_file,
+        args.seed
+    )
 
 if __name__ == "__main__":
     main()
